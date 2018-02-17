@@ -1,5 +1,5 @@
 public class ScrabbleSolverImplementation extends Main {
-    public int   charScrabbleValue;
+    protected int   charScrabbleValue;
     private String charValue;
 //inherits methods charScrabbleValue from Main.Java
     @Override

@@ -59,6 +59,7 @@ public class Main {
         10 points: Q ×1, Z ×1
         */
         int charValue = 0;
+        String wordlimit;
 
         if ((chr.contains("a"))||(chr.contains("e"))||(chr.contains("i"))||(chr.contains("o"))||(chr.contains("n"))
             ||(chr.contains("r"))||(chr.contains("t"))||(chr.contains("l"))||(chr.contains("s"))|| (chr.contains("u"))
@@ -76,6 +77,13 @@ public class Main {
         if ((chr.contains("j"))||(chr.contains("x"))) {charValue=8;}
 
         if ((chr.contains("q"))||(chr.contains("z")) ) {charValue=10;}
+        if ((charValue>8) ) {
+            //charValue=0;
+            //
+            JOptionPane.showMessageDialog(null, "The Scrabble Word Finder Limits only upto 8 character sets");
+         System.exit(0);
+            //System.out.println("you have bypassed the character limit " ) ;
+        }
 
         //System.out.println("Value is: " + charValue) ;
         return charValue;
