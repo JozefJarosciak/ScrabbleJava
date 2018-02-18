@@ -97,7 +97,8 @@ public class Main extends JFrame{
         // split entered string into letters
         String[] array = enteredWord.split("(?!^)");
         int arrLen = array.length;
-        String sqlQuery = "SELECT DISTINCT WORD FROM en_aspell WHERE (";
+       // String sqlQuery = "SELECT UNIQUE * FROM en_aspell WHERE (";
+        String sqlQuery = "SELECT DISTINCT WORD,LENGTH(WORD) FROM en_aspell WHERE (";
        // sqlQuery = sqlQuery + "  CHAR_LENGTH(WORD)<="+arrLen+" AND (";
         //sqlQuery = sqlQuery + "  CHAR_LENGTH(WORD)<=8) AND (";
         //sqlQuery = sqlQuery +  "LOWER(word) RLIKE " + "testinge";
@@ -110,7 +111,7 @@ public class Main extends JFrame{
         }
         sqlQuery = sqlQuery.replaceFirst(" OR $", "");
 
-        sqlQuery = sqlQuery + " AND CHAR_LENGTH(WORD)<="+arrLen+") AND (";
+        sqlQuery = sqlQuery + " AND LENGTH(WORD)<="+arrLen+") AND (";
         //sqlQuery = sqlQuery + " LENGTH(WORD) > 1 AND LENGTH(WORD)<=8  ) AND (";
         for(int i=0; i<alphabet.length(); i++) {
             sqlQuery = sqlQuery + "LOWER(WORD) NOT LIKE '%" + alphabet.charAt(i)+"%' AND ";
@@ -118,7 +119,8 @@ public class Main extends JFrame{
             sqlQuery = sqlQuery + "LOWER(WORD) NOT LIKE '%" + alphabet.charAt(i)+"' AND ";
         }
         sqlQuery = sqlQuery.replaceFirst(" AND $", "");
-        sqlQuery = sqlQuery + ")ORDER BY CHAR_LENGTH(WORD) DESC";
+        sqlQuery = sqlQuery + ")ORDER BY LENGTH(WORD) DESC";
+       // sqlQuery = sqlQuery + " (AND LENGTH(WORD)<=4)";
         return sqlQuery;
     }
 
