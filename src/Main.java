@@ -8,7 +8,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-public class Main {
+public class Main extends JFrame{
 
     // declaring the components
     private JPanel panel1;
@@ -38,7 +38,7 @@ public class Main {
                 dbQuery();
             }
         });
-
+       // searchText = new JTextField("aaaaaaaaaaaaaaaaaaaaaaa");
         // Listen to Enter Button on the Text Entry Box
         searchText.addActionListener(new ActionListener() {
             @Override
@@ -81,7 +81,8 @@ public class Main {
             //charValue=0;
             //
             JOptionPane.showMessageDialog(null, "The Scrabble Word Finder Limits only upto 8 character sets");
-         System.exit(0);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        System.exit(0);
             //System.out.println("you have bypassed the character limit " ) ;
         }
 
@@ -96,24 +97,28 @@ public class Main {
         // split entered string into letters
         String[] array = enteredWord.split("(?!^)");
         int arrLen = array.length;
-        String sqlQuery = "SELECT WORD FROM en_aspell WHERE (";
+        String sqlQuery = "SELECT DISTINCT WORD FROM en_aspell WHERE (";
+       // sqlQuery = sqlQuery + "  CHAR_LENGTH(WORD)<="+arrLen+" AND (";
+        //sqlQuery = sqlQuery + "  CHAR_LENGTH(WORD)<=8) AND (";
+        //sqlQuery = sqlQuery +  "LOWER(word) RLIKE " + "testinge";
         for(int i=0; i<arrLen; i++){
-            //sqlQuery = sqlQuery +  "word LIKE '%" + array[i] + "%' AND ";
+            sqlQuery = sqlQuery +  "LOWER(word) LIKE '%" + array[i] + "%' AND ";
+
             sqlQuery = sqlQuery +  "LOWER(WORD) LIKE '%" + array[i] + "%' OR ";
             // remove used letters from alphabet string
             alphabet = alphabet.replace(array[i], "");
         }
         sqlQuery = sqlQuery.replaceFirst(" OR $", "");
 
-        sqlQuery = sqlQuery + " AND LENGTH(WORD)<="+arrLen+") AND (";
-
+        sqlQuery = sqlQuery + " AND CHAR_LENGTH(WORD)<="+arrLen+") AND (";
+        //sqlQuery = sqlQuery + " LENGTH(WORD) > 1 AND LENGTH(WORD)<=8  ) AND (";
         for(int i=0; i<alphabet.length(); i++) {
             sqlQuery = sqlQuery + "LOWER(WORD) NOT LIKE '%" + alphabet.charAt(i)+"%' AND ";
             sqlQuery = sqlQuery + "LOWER(WORD) NOT LIKE '" + alphabet.charAt(i)+"%' AND ";
             sqlQuery = sqlQuery + "LOWER(WORD) NOT LIKE '%" + alphabet.charAt(i)+"' AND ";
         }
         sqlQuery = sqlQuery.replaceFirst(" AND $", "");
-        sqlQuery = sqlQuery + ")";
+        sqlQuery = sqlQuery + ")ORDER BY CHAR_LENGTH(WORD) DESC";
         return sqlQuery;
     }
 
