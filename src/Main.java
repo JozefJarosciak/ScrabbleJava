@@ -80,9 +80,9 @@ public class Main extends JFrame{
         if ((charValue>8) ) {
             //charValue=0;
             //
-            JOptionPane.showMessageDialog(null, "The Scrabble Word Finder Limits only upto 8 character sets");
-            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        System.exit(0);
+            //JOptionPane.showMessageDialog(null, "The Scrabble Word Finder Limits only upto 8 character sets");
+            //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //System.exit(0);
             //System.out.println("you have bypassed the character limit " ) ;
         }
 
@@ -99,7 +99,11 @@ public class Main extends JFrame{
         int arrLen = array.length;
        // String sqlQuery = "SELECT UNIQUE * FROM en_aspell WHERE (";
         String sqlQuery = "SELECT DISTINCT WORD,LENGTH(WORD) FROM en_aspell WHERE (";
-       // sqlQuery = sqlQuery + "  CHAR_LENGTH(WORD)<="+arrLen+" AND (";
+        //this SQL query file
+        //word must be more than 2
+        //word entered less than one results to a numeric exception
+       sqlQuery = sqlQuery + "  LENGTH(WORD) BETWEEN 2  AND 8 AND ";
+        //sqlQuery = sqlQuery + "   LENGTH(WORD)>= 2 AND LENGTH(WORD) <= 8  AND ";
         //sqlQuery = sqlQuery + "  CHAR_LENGTH(WORD)<=8) AND (";
         //sqlQuery = sqlQuery +  "LOWER(word) RLIKE " + "testinge";
         for(int i=0; i<arrLen; i++){
@@ -114,6 +118,8 @@ public class Main extends JFrame{
         sqlQuery = sqlQuery + " AND LENGTH(WORD)<="+arrLen+") AND (";
         //sqlQuery = sqlQuery + " LENGTH(WORD) > 1 AND LENGTH(WORD)<=8  ) AND (";
         for(int i=0; i<alphabet.length(); i++) {
+            sqlQuery = sqlQuery + "  LENGTH(WORD) BETWEEN 2 AND "+arrLen+" AND ";
+            sqlQuery = sqlQuery + "  LENGTH(WORD) > 1 and LENGTH(WORD)<=8 AND ";
             sqlQuery = sqlQuery + "LOWER(WORD) NOT LIKE '%" + alphabet.charAt(i)+"%' AND ";
             sqlQuery = sqlQuery + "LOWER(WORD) NOT LIKE '" + alphabet.charAt(i)+"%' AND ";
             sqlQuery = sqlQuery + "LOWER(WORD) NOT LIKE '%" + alphabet.charAt(i)+"' AND ";
