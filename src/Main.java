@@ -1,5 +1,8 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,6 +34,9 @@ public class Main extends JFrame{
 
     public Main() {
 
+        // Allow maximum 8 characters in the search field
+        searchText.setDocument(new JTextFieldLimit(8));
+
         // Listen to Search Button
         searchButton.addActionListener(new ActionListener() {
             @Override
@@ -38,7 +44,9 @@ public class Main extends JFrame{
                 dbQuery();
             }
         });
-       // searchText = new JTextField("aaaaaaaaaaaaaaaaaaaaaaa");
+
+
+        // searchText = new JTextField("aaaaaaaaaaaaaaaaaaaaaaa");
         // Listen to Enter Button on the Text Entry Box
         searchText.addActionListener(new ActionListener() {
             @Override
@@ -46,6 +54,22 @@ public class Main extends JFrame{
                 dbQuery();
             }
         });
+
+    }
+
+    // Create Limit on Number of Letters Typed
+    public class JTextFieldLimit extends PlainDocument {
+        private int limit;
+        JTextFieldLimit(int limit) {
+            super();
+            this.limit = limit;
+        }
+        public void insertString( int offset, String  str, AttributeSet attr ) throws BadLocationException {
+            if (str == null) return;
+            if ((getLength() + str.length()) <= limit) {
+                super.insertString(offset, str, attr);
+            }
+        }
     }
 
     public int charScrabbleValue(String chr) {
@@ -107,7 +131,7 @@ public class Main extends JFrame{
         //sqlQuery = sqlQuery + "  CHAR_LENGTH(WORD)<=8) AND (";
         //sqlQuery = sqlQuery +  "LOWER(word) RLIKE " + "testinge";
         for(int i=0; i<arrLen; i++){
-            sqlQuery = sqlQuery +  "LOWER(word) LIKE '%" + array[i] + "%' AND ";
+            sqlQuery = sqlQuery +  "LOWER(WORD) LIKE '%" + array[i] + "%' AND ";
             sqlQuery = sqlQuery +  "LOWER(WORD) LIKE '%" + array[i] + "%' OR ";
             // remove used letters from alphabet string
             alphabet = alphabet.replace(array[i], "");
@@ -122,6 +146,7 @@ public class Main extends JFrame{
             sqlQuery = sqlQuery + "LOWER(WORD) NOT LIKE '%" + alphabet.charAt(i)+"%' AND ";
             sqlQuery = sqlQuery + "LOWER(WORD) NOT LIKE '" + alphabet.charAt(i)+"%' AND ";
             sqlQuery = sqlQuery + "LOWER(WORD) NOT LIKE '%" + alphabet.charAt(i)+"' AND ";
+            sqlQuery = sqlQuery + "LOWER(WORD) NOT LIKE '%''%' AND ";
         }
         sqlQuery = sqlQuery.replaceFirst(" AND $", "");
         sqlQuery = sqlQuery + ")GROUP BY WORD ORDER BY LENGTH(WORD) DESC";
@@ -157,7 +182,7 @@ public class Main extends JFrame{
 
             // Build SQL Search Query based on the letters entered by the user
             String sqlQuery = createSqlQuery(searchLetters);
-            System.out.println(sqlQuery);
+            //System.out.println(sqlQuery);
 
             // Run SQL query
             ResultSet result = stmt.executeQuery(sqlQuery);
