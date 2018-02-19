@@ -149,6 +149,12 @@ public class Main extends JFrame{
             sqlQuery = sqlQuery + "LOWER(WORD) NOT LIKE '%''%' AND ";
         }
         sqlQuery = sqlQuery.replaceFirst(" AND $", "");
+
+        for(int i=0; i<arrLen; i++) {
+            int counter = enteredWord.split(array[i], -1).length - 1;
+            sqlQuery = sqlQuery + " AND Char_length(LOWER(WORD)) - Char_length(REPLACE(LOWER(WORD), '" + array[i] + "', '')) <= " + counter;
+        }
+
         sqlQuery = sqlQuery + ")GROUP BY WORD ORDER BY LENGTH(WORD) DESC";
        // sqlQuery = sqlQuery + " (AND LENGTH(WORD)<=4)";
         return sqlQuery;
