@@ -108,7 +108,6 @@ public class Main extends JFrame{
         //sqlQuery = sqlQuery +  "LOWER(word) RLIKE " + "testinge";
         for(int i=0; i<arrLen; i++){
             sqlQuery = sqlQuery +  "LOWER(word) LIKE '%" + array[i] + "%' AND ";
-
             sqlQuery = sqlQuery +  "LOWER(WORD) LIKE '%" + array[i] + "%' OR ";
             // remove used letters from alphabet string
             alphabet = alphabet.replace(array[i], "");
@@ -125,7 +124,7 @@ public class Main extends JFrame{
             sqlQuery = sqlQuery + "LOWER(WORD) NOT LIKE '%" + alphabet.charAt(i)+"' AND ";
         }
         sqlQuery = sqlQuery.replaceFirst(" AND $", "");
-        sqlQuery = sqlQuery + ")ORDER BY LENGTH(WORD) DESC";
+        sqlQuery = sqlQuery + ")GROUP BY WORD ORDER BY LENGTH(WORD) DESC";
        // sqlQuery = sqlQuery + " (AND LENGTH(WORD)<=4)";
         return sqlQuery;
     }
