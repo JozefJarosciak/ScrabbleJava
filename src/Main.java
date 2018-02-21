@@ -22,7 +22,7 @@ public class Main extends JFrame {
 
     public Main() {
         // Allow maximum 8 characters in the search field
-        searchText.setDocument(new JTextFieldLimit(8));
+        searchText.setDocument(new ScrabbleTextLimit(8));
 
         // Listen to Search Button and execute query
         searchButton.addActionListener(new ActionListener() {
@@ -67,8 +67,8 @@ public class Main extends JFrame {
         int charValue = 0;
 
         if ((chr.contains("a")) || (chr.contains("e")) || (chr.contains("i")) || (chr.contains("o")) || (chr.contains("n"))
-            || (chr.contains("r")) || (chr.contains("t")) || (chr.contains("l")) || (chr.contains("s")) || (chr.contains("u"))
-            ) {
+                || (chr.contains("r")) || (chr.contains("t")) || (chr.contains("l")) || (chr.contains("s")) || (chr.contains("u"))
+                ) {
             charValue = 1;
         }
         if ((chr.contains("d")) || (chr.contains("g"))) {
@@ -78,7 +78,7 @@ public class Main extends JFrame {
             charValue = 3;
         }
         if ((chr.contains("f")) || (chr.contains("h")) || (chr.contains("v")) || (chr.contains("w")) || (chr.contains("y"))
-            ) {
+                ) {
             charValue = 4;
         }
         if ((chr.contains("k"))) {
@@ -143,7 +143,7 @@ public class Main extends JFrame {
             // Connect to DB
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection(
-                "jdbc:mysql://85.10.205.173:3307/englishwords?autoReconnect=true&useSSL=false", "jozef", "elvina");
+                    "jdbc:mysql://85.10.205.173:3307/englishwords?autoReconnect=true&useSSL=false", "jozef", "elvina");
             Statement stmt = con.createStatement();
 
             // Setup Table for Displaying Results
@@ -190,23 +190,24 @@ public class Main extends JFrame {
             ee.printStackTrace(System.out);
         }
     }
+}
 
     // Create Limit on Number of Letters Typed, we need to add a new functionality into JTextField, as it's not there
-    public class JTextFieldLimit extends PlainDocument {
-        private int limit;
-        JTextFieldLimit(int limit) {
-            super();
-            this.limit = limit;
-        }
-        public void insertString(int offset, String str, AttributeSet attr) throws BadLocationException {
-            if (str == null) return;
-            if ((getLength() + str.length()) <= limit) {
-                super.insertString(offset, str, attr);
-            }
-        }
-    }
-
-
-}
+//    public class JTextFieldLimit extends PlainDocument {
+//        private int limit;
+//        JTextFieldLimit(int limit) {
+//            super();
+//            this.limit = limit;
+//        }
+//        public void insertString(int offset, String str, AttributeSet attr) throws BadLocationException {
+//            if (str == null) return;
+//            if ((getLength() + str.length()) <= limit) {
+//                super.insertString(offset, str, attr);
+//            }
+//        }
+//    }
+//
+//
+//}
 
 
